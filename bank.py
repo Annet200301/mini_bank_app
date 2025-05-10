@@ -1,25 +1,65 @@
-#==STAFF MENU=======================================================
+def option():
+    global option
+    while True:
+        try:
+            option=int(input("enter the option you choose:"))
+            break
+        except ValueError:
+            print(" your choosed option is invalid")
+#==staff menu==================================================================
 def staff_menu():
     print("===============MENU OPTION===============")
-    print("1:New customer creation")
-    print("2:New customer accounts creation")
-    print("3:Accounts details")
-    print("4:Deposits")
-    print("5:Withdrawels")
-    print("6:update customer")
-    print("7:Transaction history")
-    print("8:Transaction between accounts")
-    print("9:Exit")
-#===CUSTOMER MENU=======================================================
+    print("1:adding new customer and account creation")
+    print("2:Deposits")
+    print("3:Withdrawels")
+    print("4:Check balances")
+    print("5:Transaction between accounts")
+    print("6:Transaction history")
+    print("7:update the customer")
+    print("8:exit")
+    option()
+    if choice == "1":
+        user_details_input()
+        new_account_creation()
+    elif choice == "2":
+        deposits()
+    elif choice == "3":
+        withdrawel()
+    elif choice == "4":
+        balance_check()
+    elif choice == "5":
+        transfer_between_accounts()   
+    elif choice == "6":
+        transaction_history()
+    elif choice == "7":
+        update_customer()
+    else :
+        print('thank you for using our banking sercices')
+#===customer menu=======================================================================
 def  customer_menu():
     print("===============MENU OPTION===============")
     print("1:Deposit")
     print("2:Withdrawel")
     print("3:Check balance")
-    print("4:update customer")
-    print("6:Transaction history")
-    print("7:Transaction between accounts")
-    print("8:Exit")
+    print("4:Transfer between accounts")
+    print("5:Transaction history")
+    print("6:Check balances")
+    print("7:Exit")
+    option()
+    if choice == "1":
+        deposits()
+    elif choice == "2":
+        withdrawel()
+    elif choice == "3":
+        balance_check()
+    elif choice == "4":
+        transfer_between_accounts()   
+    elif choice == "5":
+        transaction_history()
+    elif choice == "6":
+        balance_check()
+    else :
+        print('thank you for using our banking sercices')
 #====NEW CUSTOMER CREATION===============================================
 def user_details_input():
     print ("-------------------------------")
