@@ -1,15 +1,7 @@
 from datetime import datetime
-#==========option def ============================================
-def option():
-    option
-    while True:
-        try:
-            option=int(input("enter the option you choose:"))
-            break
-        except ValueError:
-            print(" your choosed option is invalid")
 #==staff menu==================================================================
 def staff_menu():
+    global is_customer
     print("===============MENU OPTION===============")
     print("1:adding new customer and account creation")
     print("2:Deposits")
@@ -27,7 +19,6 @@ def staff_menu():
             print(" your chosen option is invalid")
 
     if choice == 1:
-        user_details_input()
         is_customer=2
         new_account_creation()
     elif choice == 2:
@@ -87,9 +78,9 @@ def customer_login():
                     if len(users)==2 and users[0]==username and users[1]==password:
                         print("-----LOGIN SUCCESSFUL-----")
                         customer_menu()
-                        login_success=True
+                        login_successful=True
                         break
-            if not login_success:
+            if not login_successful:
                 print("-----LOGIN FAILED!!!!!!!-----")
         except FileNotFoundError:
             print ("Errroooorrrr ....users.txt  file not found!!!!!!!!!!! ")
@@ -202,27 +193,26 @@ def deposits():
         lines = file.readlines()
     updated_lines=[]
 
-    with open ("accounts.txt","w") as file:
-        for line in lines:
-            data=line.strip().split(",")
+    for line in lines:
+        data=line.strip().split(",")
 
-            if data[0]==account_no:
-                deposite_amount=amount()
-                balances=float(data[2])
-                new_balances=balances + deposite_amount
-                file.write(f"{account_no},{data[1]},{new_balances}\n")
-                depo=True
+        if data[0]==account_no:
+            deposite_amount=amount()
+            balances=float(data[2])
+            new_balances=balances + deposite_amount
+            updated_lines.append(f"{account_no},{data[1]},{new_balances}\n")
+            depo=True
 
-                time = datetime.now().strftime("%d-%m-%Y %A %I %M %p")
-                with open("Transactions.txt","a") as file:
-                    file.write(f"{account_no},{balances},deposit,{new_balances},{time}\n")
+            time = datetime.now().strftime("%d-%m-%Y %A %I %M %p")
+            with open("Transactions.txt","a") as  trans_file:
+                trans_file.write(f"{account_no},{balances},deposit,{new_balances},{time}\n")
                 print(f"deposite successful:) and your new balance is{new_balances}")
-            else:
-                updated_lines.append(line)
-        with open ("accounts.txt","w") as file:
-            file.writelines(updated_lines)
-        if not depo:
-            print("Account not found")
+        else:
+            updated_lines.append(line)
+    with open ("accounts.txt","w") as file:
+        file.writelines(updated_lines)
+    if not depo:
+        print("Account not found")
 #--------------------------------------------------------------------------------------------------------------------
 def withdrawal():
     account_number=input("Enter the account number:").strip()
@@ -285,7 +275,7 @@ def transfer_between_accounts():
                         print("not sufficient balance for transfer")
                         updated_lines.append(line)
 
-                elif parts[1] == to_acc_no:   
+                elif data[1] == to_acc_no:   
                     receiver_balance = float(data[2])
                     receiver_new_balance=receiver_balance+transfer_amount
                     updated_lines.append(f"{data[0]},{from_acc_no},{receiver_new_balance}\n")
@@ -325,7 +315,7 @@ def update_customer():
         
         for line in lines:
             data = line.strip().split(",")
-            if data[0] == Username:
+            if data[0] == username:
                 is_customer = True
                 print(" ------------options to choose\n----------1:username\n2:password\n3:nic\n4:Address\n5:phone nuumber")
                 while True:
@@ -368,7 +358,7 @@ def update_customer():
             else:
                 updated_lines.append(line)
         with open("customer_details.txt","w")as file:
-            file.write(updated_lines)
+            file.writelines(updated_lines)
 
         if is_customer:
             print("successfully updated the customer")
