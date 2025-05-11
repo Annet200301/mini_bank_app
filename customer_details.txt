@@ -1,0 +1,24 @@
+username:Annet
+password:ana123
+NIC:20034565456
+address:jaffna
+phone number:0756787765
+-----------------------------------------------------------------------------
+username:Abigayil
+password:abi123
+NIC:200234568766
+address:jaffna
+phone number:0756787654
+-----------------------------------------------------------------------------
+username:Anarkent
+password:anar123
+NIC:200123454322
+address:jaffna
+phone number:0774565765
+-----------------------------------------------------------------------------
+username:dayana
+password:anar123
+NIC:20012354765
+address:vavuniya
+phone number:0765445765
+-----------------------------------------------------------------------------
