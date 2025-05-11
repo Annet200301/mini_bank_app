@@ -269,7 +269,7 @@ def transfer_between_accounts():
                         time = datetime.now().strftime("%d-%m-%Y %A %I:%M %p")
 
                         with open("transaction.txt", "a") as trans_file:
-                            trans_file.write(f"from_acc: {from_acc_no}, to_acc: {to_acc_no}, transfer: {transfer_amount}, {new_balances} ,{time}\n")
+                            trans_file.write(f"from_acc: {from_acc_no}, to_acc: {to_acc_no}, transfer: {transfer_amount}, {sender_new_balance} ,{time}\n")
                         print(f"money transfer is successful and your New balance: {sender_new_balance}")
                     else:
                         print("not sufficient balance for transfer")
@@ -292,15 +292,17 @@ def transfer_between_accounts():
 ################################################################################################################
 def transaction_history():
     account_number = input("Enter your account number to see you history: ").strip()
+    found=False
     try:
         with open("transactions.txt", "r") as transaction_file:
             print(f"{'account_number':<10}{'current balance':<10}{'deposite/withdrawel':<10}{'amount':<10}{'time':}\n")
             for line in transaction_file:
                 transaction_data = line.strip().split(',')
-                if account_number == transaction_data[0]:
+                if account_number == transaction_data[0] and len(transaction_data)>=5:
                     print(f"{transaction_data[0]:<10}{transaction_data[1]:<15}{transaction_data[2]:<10}{transaction_data[3]:<15}{transaction_data[4]}\n")
-                else:
-                    continue
+                    found=True
+        if not found:
+            print("no transaction found for this account")
     except FileNotFoundError:
         print("Transaction file not found :(") 
 ################################################################################################################
@@ -370,22 +372,20 @@ def update_customer():
 #######################################################################################################
 def banking_app():
     while True:
-        print("welcome to our banking system----------\n1:Admin\n2:Customer\n3:Exit")
-        while True:
-            try:
-                choice=int(input("enter the option you choose(1-3):"))
+        try:
+            print("welcome to our banking system----------\n1:Admin\n2:Customer\n3:Exit")
+            choice=int(input("enter the option you choose(1-3):"))
+            if choice==1:
+                admin_login()
+            elif choice==2:
+                customer_login()
+            elif choice==3:
+                print("-----THANKYOU-----")
                 break
-            except ValueError:
-                print(" your option is invalid")
-        if choice==1:
-            admin_login()
-        elif choice==2:
-            customer_login()
-        elif choice==3:
-            print("-----THANKYOU-----")
-            break
-        else:
-            print("Enter the choice between(1-3)")
+            else:
+                print("Enter the choice between(1-3)")
+        except ValueError:
+            print(" your option is invalid")
 banking_app()
         
 
