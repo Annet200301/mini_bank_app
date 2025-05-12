@@ -9,7 +9,6 @@ def input_validation(prompt):
             print("input can't empty")
 #==staff menu======================================================================
 def staff_menu():
-    global is_customer
     print("===============MENU OPTION===============")
     print("1:adding new customer and account creation")
     print("2:Deposits")
@@ -25,7 +24,6 @@ def staff_menu():
         except ValueError:
             print(" your chosen option is invalid")
     if choice == (1):
-        is_customer=2
         new_account_creation()
     elif choice == 2:
         deposits()
@@ -141,11 +139,9 @@ def user_details_input():
 #                      NEW ACCOUNT CREATION
 #------------------------------------------------------------------------------------------------------------------------------
 def new_account_creation():
-    global is_customer
     global customer_details
     customer_details=user_details_input()
-    if is_customer==2: 
-        account_number=(f"ACC{abs(hash(customer_details[2]))}UIC")
+    account_number=(f"ACC{abs(hash(customer_details[2]))}UIC")
     while True:
         try:
             balance=int(input("Enter the initial amount to create an account:"))
