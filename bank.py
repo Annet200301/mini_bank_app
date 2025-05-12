@@ -1,5 +1,12 @@
 from datetime import datetime
-#==staff menu==================================================================
+def input_validation(prompt):
+    while True:
+        value =  input(prompt).strip()
+        if value :
+            return value
+        else:
+            print("input can't empty")
+#==staff menu======================================================================
 def staff_menu():
     global is_customer
     print("===============MENU OPTION===============")
@@ -11,14 +18,15 @@ def staff_menu():
     print("6:Transaction history")
     print("7:update the customer")
     print("8:exit")
+
+def Staff_choice():
     while True:
         try:
             choice =int(input("enter the option you choose:"))
             break
         except ValueError:
             print(" your chosen option is invalid")
-
-    if choice == 1:
+    if choice == (1):
         is_customer=2
         new_account_creation()
     elif choice == 2:
@@ -45,6 +53,7 @@ def  customer_menu():
     print("5:Transaction history")
     print("6:Check balances")
     print("7:Exit")
+def Customer_choice():
     while True:
         try:
             choice=int(input("enter the option you choose:"))
@@ -68,17 +77,18 @@ def  customer_menu():
 #---------------------------------------------Login -----------------------------------------  
 def customer_login():
     while True:
+        global login_successful
         username = input("Enter your username:").strip()
         password = input('Enter your password:').strip()
-        login_sucessful=False
+        login_successful=False
         try :
-            with open ("user.txt","r") as User_file:
+            with open ("users.txt","r") as User_file:
                 for lines in User_file:
-                    users=line.strip().split(",")
+                    users=lines.strip().split(",")
                     if len(users)==2 and users[0]==username and users[1]==password:
                         print("-----LOGIN SUCCESSFUL-----")
-                        customer_menu()
                         login_successful=True
+                        Customer_choice()
                         break
             if not login_successful:
                 print("-----LOGIN FAILED!!!!!!!-----")
@@ -93,9 +103,9 @@ def admin_login():
         password = input('Enter your password:').strip()
         if username==admin_id and password==admin_password:
                 print("-----LOGIN SUCCESSFUL-----")
-                staff_menu()
+                staff_choice()
         else:
-            print("username or password is wrong!")                
+            print("username or password is wrong")            
 #USER DETAILS INPUT AND NEW ACCOUNT CREATION########################################################################
 def user_details_input():
     print ("-------------------------------")
@@ -111,15 +121,15 @@ def user_details_input():
     except FileNotFoundError:
         pass
     while True:
-        username= input("enter the name:").strip()
+        username= input_validation("enter the name:").strip()
         if username in check_user_name:
             print ('oops!!  user name already exist try a new one ')
         else:
             break
-    address=input("enter the address:")
-    nic=input("enter the nic number :")
-    phone_number=input("enter the phone number:")
-    password=input("enter the password:")
+    address=input_validation("enter the address:")
+    nic=input_validation("enter the nic number :")
+    phone_number=input_validation("enter the phone number:")
+    password=input_validation("enter the password:")
 
 
     with open ("users.txt","a")as file:
@@ -128,7 +138,7 @@ def user_details_input():
     with open("customer_details.txt","a")as file:
         file.write(f"username:{username}\npassword:{password}\nNIC:{nic}\naddress:{address}\nphone number:{phone_number}\n")
         file.write("-----------------------------------------------------------------------------\n")
-    print('SUCCESSFULLY CREATED   &   SAVED THE CUSTOMER DETAILS :) ')
+    print('SUCCESSFULLY CREATED   &   SAVED THE CUSTOMER DETAILS ')
     print("==================================================================================================")
     return[username, password, nic, address, phone_number]
 #------------------------------------------------------------------------------------------------------------------------------
@@ -155,7 +165,7 @@ def new_account_creation():
 
     print(f"Account created successfully! The account Number is: {account_number}")
 
-#BALANCE CHECK ##################################################################################################
+#BALANCE CHECK #####################################################################################################
 def balance_check():
     print("------------------------------------------------------------------------------------------------")
     print("                              ACCOUNT DETAILS                                                   ")
@@ -268,7 +278,7 @@ def transfer_between_accounts():
                         transfer=True
                         time = datetime.now().strftime("%d-%m-%Y %A %I:%M %p")
 
-                        with open("transaction.txt", "a") as trans_file:
+                        with open("transactions.txt", "a") as trans_file:
                             trans_file.write(f"from_acc: {from_acc_no}, to_acc: {to_acc_no}, transfer: {transfer_amount}, {sender_new_balance} ,{time}\n")
                         print(f"money transfer is successful and your New balance: {sender_new_balance}")
                     else:
@@ -304,7 +314,7 @@ def transaction_history():
         if not found:
             print("no transaction found for this account")
     except FileNotFoundError:
-        print("Transaction file not found :(") 
+        print("Transaction file not found ")
 ################################################################################################################
 def update_customer():
     username=input("Enter the user name")
@@ -319,7 +329,7 @@ def update_customer():
             data = line.strip().split(",")
             if data[0] == username:
                 is_customer = True
-                print(" ------------options to choose\n----------1:username\n2:password\n3:nic\n4:Address\n5:phone nuumber")
+                print(" ------------options to choose----------\n1:username\n2:password\n3:nic\n4:Address\n5:phone nuumber")
                 while True:
                     try:
                         option = int(input("Enter data to update(1-5):"))
@@ -344,16 +354,16 @@ def update_customer():
                         else:
                             break
                 elif option==2:
-                    new_password=input("Enter the new password:")
+                    new_password=input_validation("Enter the new password:")
                     data[1]=new_password
                 elif option == 3:
-                    new_nic = input("enter the new nic: ")
+                    new_nic = input_validation("enter the new nic: ")
                     data[2]=new_nic
                 elif option== 4:
-                    new_address = input("enter the new address: ")
+                    new_address = input_validation("enter the new address: ")
                     data[3]=new_address
                 elif option == 5:
-                    new_number = input("enter the new phone number: ")
+                    new_number = input_validation("enter the new phone number: ")
                     data[4]=new_number
 
                 updated_lines.append(",".join(data) + "\n")
@@ -368,16 +378,18 @@ def update_customer():
             print("user name not found")
 
     except FileNotFoundError:
-        print("customer_details.txt  file not found.")  
+        print("customer_details.txt  file not found.")
 #######################################################################################################
 def banking_app():
     while True:
         try:
             print("welcome to our banking system----------\n1:Admin\n2:Customer\n3:Exit")
-            choice=int(input("enter the option you choose(1-3):"))
+            choice=int(input_validation("enter the option you choose(1-3):"))
             if choice==1:
+                staff_menu()
                 admin_login()
             elif choice==2:
+                customer_menu()
                 customer_login()
             elif choice==3:
                 print("-----THANKYOU-----")
