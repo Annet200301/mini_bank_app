@@ -103,7 +103,7 @@ def admin_login():
         password = input('Enter your password:').strip()
         if username==admin_id and password==admin_password:
                 print("-----LOGIN SUCCESSFUL-----")
-                staff_choice()
+                Staff_choice()
         else:
             print("username or password is wrong")            
 #USER DETAILS INPUT AND NEW ACCOUNT CREATION########################################################################
