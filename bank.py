@@ -16,8 +16,7 @@ def staff_menu():
     print("4:Check balances")
     print("5:Transaction between accounts")
     print("6:Transaction history")
-    print("7:update the customer")
-    print("8:exit")
+    print("7:exit")
 
 def Staff_choice():
     while True:
@@ -39,10 +38,9 @@ def Staff_choice():
         transfer_between_accounts()   
     elif choice == 6:
         transaction_history()
-    elif choice == 7:
-        update_customer()
     else :
         print('thank you for using our banking sercices')
+        exit()
 #===customer menu=======================================================================
 def  customer_menu():
     print("===============MENU OPTION===============")
@@ -74,6 +72,7 @@ def Customer_choice():
         balance_check()
     else :
         print('thank you for using our banking sercices')
+        exit()
 #---------------------------------------------Login -----------------------------------------  
 def customer_login():
     while True:
@@ -315,70 +314,6 @@ def transaction_history():
             print("no transaction found for this account")
     except FileNotFoundError:
         print("Transaction file not found ")
-################################################################################################################
-def update_customer():
-    username=input("Enter the user name")
-    is_customer= False
-    updated_lines=[]
-    try:
-        with open("customer_details.txt", "r") as file:
-            lines = file.readlines()
-
-        
-        for line in lines:
-            data = line.strip().split(",")
-            if data[0] == username:
-                is_customer = True
-                print(" ------------options to choose----------\n1:username\n2:password\n3:nic\n4:Address\n5:phone nuumber")
-                while True:
-                    try:
-                        option = int(input("Enter data to update(1-5):"))
-                        break
-                    except ValueError:
-                            print("ENTER A VALID OPTION!")
-                if option == 1:
-                    new_username = input("enter the new username: ").strip()
-                    data[0]=new_username
-                    try:
-                        with open ("users.txt","r") as file:
-                            for line in file:
-                                if "," in line:
-                                    check_user_name.add(line.strip().split()[0])
-                    except FileNotFoundError:
-                        pass
-                    while True:
-                        username= input("enter the name:").strip()
-                        if username in check_user_name:
-                            print ('oops!!  user name already exist ')
-                            print ('enter a new one with any changes')
-                        else:
-                            break
-                elif option==2:
-                    new_password=input_validation("Enter the new password:")
-                    data[1]=new_password
-                elif option == 3:
-                    new_nic = input_validation("enter the new nic: ")
-                    data[2]=new_nic
-                elif option== 4:
-                    new_address = input_validation("enter the new address: ")
-                    data[3]=new_address
-                elif option == 5:
-                    new_number = input_validation("enter the new phone number: ")
-                    data[4]=new_number
-
-                updated_lines.append(",".join(data) + "\n")
-            else:
-                updated_lines.append(line)
-        with open("customer_details.txt","w")as file:
-            file.writelines(updated_lines)
-
-        if is_customer:
-            print("successfully updated the customer")
-        else:
-            print("user name not found")
-
-    except FileNotFoundError:
-        print("customer_details.txt  file not found.")
 #######################################################################################################
 def banking_app():
     while True:
