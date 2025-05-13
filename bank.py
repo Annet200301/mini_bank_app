@@ -79,7 +79,7 @@ def customer_login():
             with open ("users.txt","r") as User_file:
                 for lines in User_file:
                     users=lines.strip().split(",")
-                    if len(users)==2 and users[0]==username and users[1]==password:
+                    if users[0]==username and users[1]==password:
                         print(Fore.LIGHTYELLOW_EX+"-----LOGIN SUCCESSFUL-----")
                         login_successful=True
                         customer_menu()
@@ -316,7 +316,7 @@ def transaction_history():
             print(f"{'account_number':<35}{'current balance':<20}{'deposite/withdrawel':<25}{'amount':<15}{'time'}\n")
             for line in transaction_file:
                 transaction_data = line.strip().split(',')
-                if account_number == transaction_data[0] and len(transaction_data)>=3:
+                if account_number == transaction_data[0]:
                     print(f"{transaction_data[0]:<35}{transaction_data[1]:<20}{transaction_data[2]:<25}{transaction_data[3]:<15}{transaction_data[4]}\n")
                     found=True
         if not found:
