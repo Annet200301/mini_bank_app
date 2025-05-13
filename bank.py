@@ -117,8 +117,9 @@ def user_details_input():
                     check_user_name.add(line.strip().split(",")[0])
     except FileNotFoundError:
         pass
+    full_name =input_validation("Enter the full name:")
     while True:
-        username= input_validation("enter the name:").strip()
+        username= input_validation("enter the user name:").strip()
         if username in check_user_name:
             print (Fore.LIGHTRED_EX+'oops!!  user name already exist try a new one ')
         else:
@@ -133,11 +134,11 @@ def user_details_input():
         file.write(f"{username},{password}\n")
 
     with open("customer_details.txt","a")as file:
-        file.write(f"username:{username}\npassword:{password}\nNIC:{nic}\naddress:{address}\nphone number:{phone_number}\n")
+        file.write(f"username:{username}\npassword:{password}\nNIC:{nic}\naddress:{address}\nphone number:{phone_number}\n full name:{full_name}\n")
         file.write("-----------------------------------------------------------------------------\n")
     print(Fore.LIGHTYELLOW_EX+'SUCCESSFULLY SAVED THE CUSTOMER DETAILS ')
     print("========================================")
-    return[username, password, nic, address, phone_number]
+    return[username, password, nic, address, phone_number,full_name]
 #------------------------------------------------------------------------------------------------------------------------------
 #                      NEW ACCOUNT CREATION
 #------------------------------------------------------------------------------------------------------------------------------
@@ -167,7 +168,7 @@ def balance_check():
     print("                              ACCOUNTS  DETAILS                                                   ")
     print("------------------------------------------------------------------------------------------------")
 
-    username=input ("Enter the user name:").strip()
+    username=input_validation("Enter the user name:").strip()
     user_found=False
     with open ("accounts.txt","r")as file:
         for line in file:

@@ -1,0 +1,21 @@
+username:annet
+password:ana123
+NIC:200376545677
+address:jaffna
+phone number:0765543454
+ full name:Annet Arunan
+-----------------------------------------------------------------------------
+username:abishegah
+password:abi123
+NIC:200243657644
+address:jaffna
+phone number:0765454345
+ full name:Abishegah Arunan
+-----------------------------------------------------------------------------
+username:abigayil
+password:abi123
+NIC:200587676544
+address:jaffna
+phone number:0761234567
+ full name:Abigayil Arunan
+-----------------------------------------------------------------------------
