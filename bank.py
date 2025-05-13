@@ -9,7 +9,7 @@ def input_validation(prompt):
         if value :
             return value
         else:
-            print("input can't empty")
+            print(Fore.LIGHTRED_EX+"input can't empty")
 #==staff menu======================================================================
 def staff_menu():
     while True:
@@ -24,7 +24,7 @@ def staff_menu():
         try:
             choice =int(input("enter the option you choose:"))
         except ValueError:
-            print(" your chosen option is invalid")
+            print(Fore.LIGHTRED_EX+" your chosen option is invalid")
         if choice == (1):
             new_account_creation()
         elif choice == 2:
@@ -40,7 +40,7 @@ def staff_menu():
         elif choice ==7:
             exit()
         else :
-            print("INVALID INPUT")
+            print(Fore.LIGHTRED_EX+"INVALID INPUT")
 #===customer menu=======================================================================
 def  customer_menu():
     while True:
@@ -54,7 +54,7 @@ def  customer_menu():
         try:
             choice=int(input("enter the option you choose:"))
         except ValueError:
-            print(" your chosen option is invalid")
+            print(Fore.LIGHTRED_EX+" your chosen option is invalid")
         if choice == 1:
             deposits()
         elif choice == 2:
@@ -68,7 +68,7 @@ def  customer_menu():
         elif choice==6:
             exit()
         else :
-            print("INVALID INPUT")
+            print(Fore.LIGHTRED_EX+"INVALID INPUT")
 #---------------------------------------------Login -----------------------------------------  
 def customer_login():
     while True:
@@ -80,28 +80,28 @@ def customer_login():
                 for lines in User_file:
                     users=lines.strip().split(",")
                     if len(users)==2 and users[0]==username and users[1]==password:
-                        print("-----LOGIN SUCCESSFUL-----")
+                        print(Fore.LIGHTYELLOW_EX+"-----LOGIN SUCCESSFUL-----")
                         login_successful=True
                         customer_menu()
                         break
             if not login_successful:
-                print("-----LOGIN FAILED!!!!!!!-----")
+                print(Fore.LIGHTRED_EX+"-----LOGIN FAILED!!!!!!!-----")
         except FileNotFoundError:
-            print ("Errroooorrrr ....users.txt  file not found!!!!!!!!!!! ")
+            print (Fore.LIGHTRED_EX+"Errroooorrrr ....users.txt  file not found!!!!!!!!!!! ")
 #ADMIN LOGIN
 def admin_login():
     admin_id= "Authoritative"
     admin_password="author123"
     while True:
-        print("For Security purpose you have to login ")
+        print(Fore.LIGHTMAGENTA_EX+"For Security purpose you have to login ")
         username = input("Enter your administrative username:").strip()
         password = input('Enter your password:').strip()
         if username==admin_id and password==admin_password:
-                print("-----LOGIN SUCCESSFUL-----")
-                print("--------------------------")
+                print(Fore.LIGHTYELLOW_EX+"-----LOGIN SUCCESSFUL-----")
+                print("---------------------------------------------")
                 staff_menu()
         else:
-            print("username or password is wrong")
+            print(Fore.LIGHTRED_EX+"username or password is wrong")
              
 #USER DETAILS INPUT AND NEW ACCOUNT CREATION########################################################################
 def user_details_input():
@@ -120,7 +120,7 @@ def user_details_input():
     while True:
         username= input_validation("enter the name:").strip()
         if username in check_user_name:
-            print ('oops!!  user name already exist try a new one ')
+            print (Fore.LIGHTRED_EX+'oops!!  user name already exist try a new one ')
         else:
             break
     address=input_validation("enter the address:")
@@ -135,7 +135,7 @@ def user_details_input():
     with open("customer_details.txt","a")as file:
         file.write(f"username:{username}\npassword:{password}\nNIC:{nic}\naddress:{address}\nphone number:{phone_number}\n")
         file.write("-----------------------------------------------------------------------------\n")
-    print('SUCCESSFULLY SAVED THE CUSTOMER DETAILS ')
+    print(Fore.LIGHTYELLOW_EX+'SUCCESSFULLY SAVED THE CUSTOMER DETAILS ')
     print("========================================")
     return[username, password, nic, address, phone_number]
 #------------------------------------------------------------------------------------------------------------------------------
@@ -151,7 +151,7 @@ def new_account_creation():
             if balance >= 1000:#initial balance must be greater than 1000
                 break
             else:
-                print("initial balance must be greater than 1000")
+                print(Fore.LIGHTRED_EX+"initial balance must be greater than 1000")
         except ValueError:
             print('ENTER A VALID  NUMERICAL AMOUNT')
 
@@ -159,7 +159,7 @@ def new_account_creation():
         file.write(f"{account_number},{customer_details[0]},{balance},\n")
 
     print(f"The account Number is: {account_number}")
-    print("Account created successfully! \n")
+    print(Fore.LIGHTYELLOW_EX+"Account created successfully! \n")
 
 #BALANCE CHECK #####################################################################################################
 def balance_check():
@@ -178,7 +178,7 @@ def balance_check():
     print("=============================================================================================\n")
                 
     if  not user_found :
-        print("please enter a user name")
+        print(Fore.LIGHTRED_EX+"please enter a user name")
 #FUNCTIONS RELATED TO WITHDRAWEL AND DEPOSITES#############################################################################
 def amount():
     while True:
@@ -221,7 +221,7 @@ def deposits():
     with open ("accounts.txt","w") as file:
         file.writelines(updated_lines)
     if not depo:
-        print("Account not found")
+        print(Fore.LIGHTRED_EX+"Account not found")
     print("=================================================================================")
 #--------------------------------------------------------------------------------------------------------------------
 def withdrawal():
@@ -251,7 +251,7 @@ def withdrawal():
                         transaction_file.write(f"{account_number},{balances},withdrawel,{new_balances},{time}\n")
                         print(f"withdrawel successful:) and your new balance is{new_balances}")
                 else:
-                    print("Insufficient balances!")
+                    print(Fore.LIGHTRED_EX+"Insufficient balances!")
                     updated_lines.append(line)
             else:
                 updated_lines.append(line)
@@ -259,7 +259,7 @@ def withdrawal():
             file.writelines(updated_lines)
                 
         if  not wdraw :
-            print("Account not found")
+            print(Fore.LIGHTRED_EX+"Account not found")
     print("==================================================================================================")
 #TRANSFER BETWEEN ACCOUNTS########################################################################################
 def transfer_between_accounts():
@@ -273,13 +273,12 @@ def transfer_between_accounts():
     try:
         with open("accounts.txt", "r") as file:
             lines = file.readlines()
-        with open("accounts.txt", "w") as file:
-         for line in lines:
+        #with open("accounts.txt", "w") as file:
+            for line in lines:
                 data = line.strip().split(",")
                 if data[0] == from_acc_no:
                     sender_balance = float(data[2])
                     transfer_amount = amount()
-                    # new_balances = balances - transfer_amount
                     if transfer_amount<=sender_balance:
                         sender_new_balance= sender_balance-transfer_amount
                         updated_lines.append(f"{from_acc_no},{data[1]},{sender_new_balance}\n")
@@ -302,10 +301,10 @@ def transfer_between_accounts():
         with open ("accounts.txt","w") as file:
             file.writelines(updated_lines)
         if not transfer:
-            print(" one or bath Account number/s  not found.")
+            print(Fore.LIGHTRED_EX+" one or bath Account number/s  not found.")
 
     except FileNotFoundError:
-        print("accounts.txt :file not found.")
+        print(Fore.LIGHTRED_EX+"accounts.txt :file not found.")
     print("-------------------------------------------------------------------------------------")
 
 ################################################################################################################
@@ -321,14 +320,14 @@ def transaction_history():
                     print(f"{transaction_data[0]:<35}{transaction_data[1]:<20}{transaction_data[2]:<25}{transaction_data[3]:<15}{transaction_data[4]}\n")
                     found=True
         if not found:
-            print("no transaction found for this account")
+            print(Fore.LIGHTRED_EX+"no transaction found for this account")
     except FileNotFoundError:
-        print("Transaction file not found ")
+        print(Fore.LIGHTRED_EX+"Transaction file not found ")
 #######################################################################################################
 def banking_app():
     while True:
         try:
-            print(Fore.GREEN+"welcome to our banking system----------\n1:Admin\n2:Customer\n3:Exit")
+            print(Fore.BLUE+"welcome to our banking system----------\n1:Admin\n2:Customer\n3:Exit")
             choice=int(input_validation("enter the option you choose(1-3):"))
             print("\n")
             if choice==1:
@@ -341,7 +340,7 @@ def banking_app():
             else:
                 print("Enter the choice between(1-3)")
         except ValueError:
-            print(" your option is invalid")
+            print(Fore.LIGHTRED_EX+" your option is invalid")
 banking_app()
         
 
