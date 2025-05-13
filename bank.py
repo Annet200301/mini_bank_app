@@ -1,4 +1,7 @@
 from datetime import datetime
+from colorama import Fore,Back,Style,init
+init(autoreset=True) 
+#"pip install colorama" run in command prompt
 #==================================================================================
 def input_validation(prompt):
     while True:
@@ -17,7 +20,7 @@ def staff_menu():
         print("4:Check balances")
         print("5:Money transfer between accounts")
         print("6:Transaction history")
-        print("7:exit")
+        print(Fore.LIGHTRED_EX+"7:exit")
         try:
             choice =int(input("enter the option you choose:"))
         except ValueError:
@@ -35,7 +38,7 @@ def staff_menu():
         elif choice == 6:
             transaction_history()
         elif choice ==7:
-            break
+            exit()
         else :
             print("INVALID INPUT")
 #===customer menu=======================================================================
@@ -47,7 +50,7 @@ def  customer_menu():
         print("3:Check balance")
         print("4:Transfer between accounts")
         print("5:Transaction history")
-        print("6:Exit")
+        print(Fore.LIGHTRED_EX+"6:Exit")
         try:
             choice=int(input("enter the option you choose:"))
         except ValueError:
@@ -311,11 +314,11 @@ def transaction_history():
     found=False
     try:
         with open("transactions.txt", "r") as transaction_file:
-            print(f"{'account_number':<10}  {'current balance':<15}  {'deposite/withdrawel':<10}  {'amount':<15}  {'time':}  \n")
+            print(f"{'account_number':<35}{'current balance':<20}{'deposite/withdrawel':<25}{'amount':<15}{'time'}\n")
             for line in transaction_file:
                 transaction_data = line.strip().split(',')
                 if account_number == transaction_data[0] and len(transaction_data)>=3:
-                    print(f"{transaction_data[0]:<10}{transaction_data[1]:<15}{transaction_data[2]:<10}{transaction_data[3]:<15}{transaction_data[4]}\n")
+                    print(f"{transaction_data[0]:<35}{transaction_data[1]:<20}{transaction_data[2]:<25}{transaction_data[3]:<15}{transaction_data[4]}\n")
                     found=True
         if not found:
             print("no transaction found for this account")
@@ -325,7 +328,7 @@ def transaction_history():
 def banking_app():
     while True:
         try:
-            print("welcome to our banking system----------\n1:Admin\n2:Customer\n3:Exit")
+            print(Fore.GREEN+"welcome to our banking system----------\n1:Admin\n2:Customer\n3:Exit")
             choice=int(input_validation("enter the option you choose(1-3):"))
             print("\n")
             if choice==1:
