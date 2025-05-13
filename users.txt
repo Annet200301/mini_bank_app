@@ -6,3 +6,4 @@ annet,ana123
 sathursha,sathu123
 Abishegah,abi123
 Arunan,arun123
+lathurshika,lathu123

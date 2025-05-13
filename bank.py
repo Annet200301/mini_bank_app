@@ -9,63 +9,63 @@ def input_validation(prompt):
             print("input can't empty")
 #==staff menu======================================================================
 def staff_menu():
-    print("===============MENU OPTION===============")
-    print("1:adding new customer and account creation")
-    print("2:Deposits")
-    print("3:Withdrawals")
-    print("4:Check balances")
-    print("5:Money transfer between accounts")
-    print("6:Transaction history")
-    print("7:exit")
     while True:
+        print("===============MENU OPTION===============")
+        print("1:adding new customer and account creation")
+        print("2:Deposits")
+        print("3:Withdrawals")
+        print("4:Check balances")
+        print("5:Money transfer between accounts")
+        print("6:Transaction history")
+        print("7:exit")
         try:
             choice =int(input("enter the option you choose:"))
-            break
         except ValueError:
             print(" your chosen option is invalid")
-    if choice == (1):
-        new_account_creation()
-    elif choice == 2:
-        deposits()
-    elif choice == 3:
-        withdrawal()
-    elif choice == 4:
-        balance_check()
-    elif choice == 5:
-        transfer_between_accounts()   
-    elif choice == 6:
-        transaction_history()
-    else :
-        print('thank you for using our banking sercices')
-        exit()
+        if choice == (1):
+            new_account_creation()
+        elif choice == 2:
+            deposits()
+        elif choice == 3:
+            withdrawal()
+        elif choice == 4:
+            balance_check()
+        elif choice == 5:
+            transfer_between_accounts()   
+        elif choice == 6:
+            transaction_history()
+        elif choice ==7:
+            break
+        else :
+            print("INVALID INPUT")
 #===customer menu=======================================================================
 def  customer_menu():
-    print("===============MENU OPTION===============")
-    print("1:Deposit")
-    print("2:Withdrawal")
-    print("3:Check balance")
-    print("4:Transfer between accounts")
-    print("5:Transaction history")
-    print("6:Exit")
     while True:
+        print("===============MENU OPTION===============")
+        print("1:Deposit")
+        print("2:Withdrawal")
+        print("3:Check balance")
+        print("4:Transfer between accounts")
+        print("5:Transaction history")
+        print("6:Exit")
         try:
             choice=int(input("enter the option you choose:"))
-            break
         except ValueError:
             print(" your chosen option is invalid")
-    if choice == 1:
-        deposits()
-    elif choice == 2:
-        withdrawal()
-    elif choice == 3:
-        balance_check()
-    elif choice == 4:
-        transfer_between_accounts()   
-    elif choice == 5:
-        transaction_history()
-    else :
-        print('thank you for using our banking sercices')
-        exit()
+        if choice == 1:
+            deposits()
+        elif choice == 2:
+            withdrawal()
+        elif choice == 3:
+            balance_check()
+        elif choice == 4:
+            transfer_between_accounts()   
+        elif choice == 5:
+            transaction_history()
+        elif choice==6:
+            exit()
+        else :
+            print("INVALID INPUT")
 #---------------------------------------------Login -----------------------------------------  
 def customer_login():
     while True:
@@ -311,10 +311,10 @@ def transaction_history():
     found=False
     try:
         with open("transactions.txt", "r") as transaction_file:
-            print(f"{'account_number':<10}{'current balance':<15}{'deposite/withdrawel':<10}{'amount':<15}{'time':}\n")
+            print(f"{'account_number':<10}  {'current balance':<15}  {'deposite/withdrawel':<10}  {'amount':<15}  {'time':}  \n")
             for line in transaction_file:
                 transaction_data = line.strip().split(',')
-                if account_number == transaction_data[0] and len(transaction_data)>=5:
+                if account_number == transaction_data[0] and len(transaction_data)>=3:
                     print(f"{transaction_data[0]:<10}{transaction_data[1]:<15}{transaction_data[2]:<10}{transaction_data[3]:<15}{transaction_data[4]}\n")
                     found=True
         if not found:
@@ -334,7 +334,7 @@ def banking_app():
                 customer_login()
             elif choice==3:
                 print("-----THANKYOU-----")
-                break
+                exit()
             else:
                 print("Enter the choice between(1-3)")
         except ValueError:
