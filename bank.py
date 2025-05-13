@@ -72,6 +72,7 @@ def  customer_menu():
 #---------------------------------------------Login -----------------------------------------  
 def customer_login():
     while True:
+        print(Fore.LIGHTMAGENTA_EX+"For Security purpose you have to login ")
         username = input("Enter your username:").strip()
         password = input('Enter your password:').strip()
         login_successful=False
