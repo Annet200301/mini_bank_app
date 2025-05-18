@@ -1,7 +1,14 @@
 from datetime import datetime
+import os
 from colorama import Fore,Back,Style,init
 init(autoreset=True) 
 #"pip install colorama" run in command prompt
+#=================================================================================
+def users_id_creation():
+    if not os.path.exists("ustomer_details.txt") or os.path.getsize("users.txt") == 0:
+        return "U001"
+    with open("customer_details.txt", "r") as user_file:
+        return f"U{int(user_file.readlines()[-1].split(",")[-1][1:]) + 1:04}"
 #==================================================================================
 def input_validation(prompt):
     while True:
@@ -93,6 +100,8 @@ def customer_login():
 def admin_login():
     admin_id= "Authoritative"
     admin_password="author123"
+    #with open("users.txt","a")as file:
+        #file.write(f"{admin_id},{admin_password}")
     while True:
         print(Fore.LIGHTMAGENTA_EX+"For Security purpose you have to login ")
         username = input("Enter your administrative username:").strip()
@@ -129,14 +138,13 @@ def user_details_input():
     nic=input_validation("enter the nic number :")
     phone_number=input_validation("enter the phone number:")
     password=input_validation("enter the password:")
-
+    user_id=users_id_creation()
 
     with open ("users.txt","a")as file:
         file.write(f"{username},{password}\n")
 
     with open("customer_details.txt","a")as file:
-        file.write(f"username:{username}\npassword:{password}\nNIC:{nic}\naddress:{address}\nphone number:{phone_number}\n full name:{full_name}\n")
-        file.write("-----------------------------------------------------------------------------\n")
+        file.write(f"{username},{password},{nic},{address},{phone_number},{full_name},{user_id}\n")
     print(Fore.LIGHTYELLOW_EX+'SUCCESSFULLY SAVED THE CUSTOMER DETAILS ')
     print("========================================")
     return[username, password, nic, address, phone_number,full_name]
@@ -144,7 +152,6 @@ def user_details_input():
 #                      NEW ACCOUNT CREATION
 #------------------------------------------------------------------------------------------------------------------------------
 def new_account_creation():
-    global customer_details
     customer_details=user_details_input()
     account_number=(f"ACC{abs(hash(customer_details[2]))}UIC")
     while True:
@@ -231,17 +238,32 @@ def withdrawal():
     print("-----------------------------------------------------")
     print("                  Withdrawel                         ")
     print("-----------------------------------------------------")
-    account_number=input("Enter the account number:").strip()
+    account_number=input_validation("Enter the account number:").strip()
+    username=input_validation("Enter the username of this account:").strip()
+    password=input_validation("Enter the password of the above username:").strip()
+    withdraw_amount=amount()
     wdraw=False
     updated_lines=[]
+    details=False
+    
 
     with open("accounts.txt","r")as file:
         lines = file.readlines()
         for line in lines:
             data=line.strip().split(",")
             if data[0]==account_number:
-                withdraw_amount=amount()
-                balances=float(data[2])
+                if data[1]==username:
+                    balances=float(data[2])
+                with open('users.txt',"r")as file:
+                    lines=file.readlines()
+                    for line in lines:
+                        words=line.strip().split(",")
+                        if data[1]==username and words[1]==password:
+                            details=True    
+                    
+                    if not details:
+                        print(Fore.LIGHTRED_EX+"you can't withdraw because username or password of this account must be wrong !")
+                        break
 
                 if withdraw_amount< balances:
                     new_balances = balances - withdraw_amount
@@ -270,44 +292,54 @@ def transfer_between_accounts():
     print("-------------------------------------------------")
     from_acc_no=input ("type:from which account number you want to transfer the amount:").strip()
     to_acc_no=input ("type:to which account number you want to transfer the amount:").strip()
-    transfer=False
+    from_found=False
+    to_found=False
+    transfer_amount=0
     updated_lines=[]
+    transfer_amount = amount()
     try:
         with open("accounts.txt", "r") as file:
             lines = file.readlines()
-        #with open("accounts.txt", "w") as file:
-            for line in lines:
-                data = line.strip().split(",")
-                if data[0] == from_acc_no:
-                    sender_balance = float(data[2])
-                    transfer_amount = amount()
-                    if transfer_amount<=sender_balance:
-                        sender_new_balance= sender_balance-transfer_amount
-                        updated_lines.append(f"{from_acc_no},{data[1]},{sender_new_balance}\n")
-                        transfer=True
-                        time = datetime.now().strftime("%d-%m-%Y %A %I:%M %p")
+        for line in lines:
+            data = line.strip().split(",")
+            if data[0] == from_acc_no:
+                from_found=True
+                sender_username=data[1]
+                sender_balance = float(data[2])
+            if data[0]==to_acc_no:
+                to_found=True
+                receiver_username=data[1]
+                receiver_balance=float(data[2])
+        if not from_found or not to_found:
+            print(Fore.LIGHTRED_EX + "One or both account numbers not found.")
+            return
+        if transfer_amount > sender_balance:
+            (Fore.LIGHTRED_EX + "Not sufficient balance for transfer.")
 
-                        with open("transactions.txt", "a") as trans_file:
-                            trans_file.write(f"from_acc: {from_acc_no}, to_acc: {to_acc_no}, transfer: {transfer_amount}, {sender_new_balance} ,{time}\n")
-                        print(f"money transfer is successful and your New balance: {sender_new_balance}")
-                    else:
-                        print("not sufficient balance for transfer")
-                        updated_lines.append(line)
 
-                elif data[1] == to_acc_no:   
-                    receiver_balance = float(data[2])
-                    receiver_new_balance=receiver_balance+transfer_amount
-                    updated_lines.append(f"{data[0]},{from_acc_no},{receiver_new_balance}\n")
-                else:
-                    updated_lines.append(line)
-        with open ("accounts.txt","w") as file:
+        for line in lines:
+            data = line.strip().split(",")
+            if data[0] == from_acc_no:
+                new_balance = sender_balance - transfer_amount
+                updated_lines.append(f"{from_acc_no},{data[1]},{new_balance}\n")
+            elif data[0] == to_acc_no:
+                new_balance = receiver_balance + transfer_amount
+                updated_lines.append(f"{to_acc_no},{data[1]},{new_balance}\n")
+            else:
+                updated_lines.append(line)
+
+        with open("accounts.txt", "w") as file:
             file.writelines(updated_lines)
-        if not transfer:
-            print(Fore.LIGHTRED_EX+" one or bath Account number/s  not found.")
+
+        time = datetime.now().strftime("%d-%m-%Y %A %I:%M %p")
+        with open("transactions.txt", "a") as file:
+            file.write(f"{from_acc_no}, to_acc: {to_acc_no}, transfer: {transfer_amount}, new_balance: {sender_balance - transfer_amount}, time: {time}\n")
+
+        print(Fore.LIGHTYELLOW_EX + f"Transfer successful. New balance for {from_acc_no}: {sender_balance - transfer_amount}")
 
     except FileNotFoundError:
-        print(Fore.LIGHTRED_EX+"accounts.txt :file not found.")
-    print("-------------------------------------------------------------------------------------")
+        print(Fore.LIGHTRED_EX + "accounts.txt not found.")
+        print("-------------------------------------------------------------------------------------")
 
 ################################################################################################################
 def transaction_history():
@@ -321,6 +353,7 @@ def transaction_history():
                 if account_number == transaction_data[0]:
                     print(f"{transaction_data[0]:<35}{transaction_data[1]:<20}{transaction_data[2]:<25}{transaction_data[3]:<15}{transaction_data[4]}\n")
                     found=True
+                
         if not found:
             print(Fore.LIGHTRED_EX+"no transaction found for this account")
     except FileNotFoundError:
